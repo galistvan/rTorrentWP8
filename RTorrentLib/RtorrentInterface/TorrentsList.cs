@@ -10,26 +10,6 @@ namespace RTorrentLib.RtorrentInterface
 {
     public class TorrentsList
     {
-        #region request
-        private const string methodCallNode = "methodCall";
-        private const string methodNameNode = "methodName";
-        #endregion
-
-        #region response
-        private const string methodResponseNode = "methodResponse";
-        #endregion
-
-        private const string paramsNode = "params";
-        private const string paramNode = "param";
-        private const string valueNode = "value";
-        private const string arrayNode = "array";
-        private const string dataNode = "data";
-
-        //types
-        private const string stringNode = "string";
-        private const string base64Node = "base64";
-
-
         private string url;
         public TorrentsList(string url)
         {
@@ -77,39 +57,6 @@ namespace RTorrentLib.RtorrentInterface
             var task = xmlRpc.Call(GetMethodName(), GetParams());
             task.Wait();
             return XElement.Load(task.Result);
-        }
-
-        private void WriteXmlRpcRequest(XmlWriter xmlWriter, string methodName, params object[] parameters)
-        {
-            //Encoding enc = Encoding.UTF8;
-            xmlWriter.WriteStartDocument();
-
-            xmlWriter.WriteStartElement(methodCallNode);
-            xmlWriter.WriteStartElement(methodNameNode);
-
-            xmlWriter.WriteString(methodName);
-
-            xmlWriter.WriteEndElement();
-            if (parameters != null && parameters.Length > 0)
-            {
-                xmlWriter.WriteStartElement(paramsNode);
-                foreach (object par in parameters)
-                {
-                    xmlWriter.WriteStartElement(paramNode);
-                    xmlWriter.WriteStartElement(valueNode);
-                    xmlWriter.WriteStartElement(stringNode);
-
-                    xmlWriter.WriteString(par.ToString());
-
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.WriteEndElement();
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-            }
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.Flush();
         }
     }
 }

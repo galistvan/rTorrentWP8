@@ -21,37 +21,24 @@ namespace RtorrentClientWP8
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
-            //rtorrentClient = new RTorrent("http://raspberrypi.lan/rpc");
             load();
 
         }
-        //private RTorrent rtorrentClient;
 
         private void load()
         {
             System.ComponentModel.BackgroundWorker bw = new System.ComponentModel.BackgroundWorker();
             bw.DoWork += (s, ea) =>
             {
-                TorrentsList torrents= new TorrentsList("http://raspberrypi.lan/rpc");
+                TorrentsList torrents = new TorrentsList("http://raspberrypi.lan/rpc");
                 var ret = torrents.CallMethod();
+
                 Dispatcher.BeginInvoke(() =>
                 {
                     torrentList.ItemsSource = ret;
-
-                    EndProgress();
                 });
             };
             bw.RunWorkerAsync();
-            StartProgress();
-        }
-
-        private void StartProgress()
-        {
-            imgInProgress.Visibility = Visibility.Visible;
-        }
-        private void EndProgress()
-        {
-            imgInProgress.Visibility = Visibility.Collapsed;
         }
 
         // Sample code for building a localized ApplicationBar

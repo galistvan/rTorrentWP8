@@ -8,14 +8,10 @@ namespace RTorrentLib
 {
     public class TorrentItem
     {
-        public string Hash { get;  set; }
-        public string TorrentName
-        {
-            get;
-            set;
-        }
+        public string Hash { get; set; }
+        public string TorrentName { get; set; }
 
-        
+
         public override string ToString()
         {
             return TorrentName;
