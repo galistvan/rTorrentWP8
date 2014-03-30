@@ -7,4 +7,4 @@ This project is developed for Windows Phone 8 clients to access rTorrent via xml
 The project now is in very initial phase.
 
 Feature(s)
- - It get the download list and show it in the screen.
+ - It can get the download list and show it on the screen.
