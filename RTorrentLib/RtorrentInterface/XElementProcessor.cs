@@ -46,5 +46,28 @@ namespace RTorrentLib.RtorrentInterface
 
             return torrent;
         }
+
+        public List<XElement> GetValueList(XElement xElement)
+        {
+            var temp = xElement; //METHODRESPONSE
+            temp = temp.Element(PARAMS);
+            temp = temp.Element(PARAM);
+            temp = temp.Element(VALUE);
+            temp = temp.Element(ARRAY);
+            temp = temp.Element(DATA);
+
+            var values = temp.Elements(VALUE).ToList();
+            return values;
+        }
+
+        public List<XElement> ProcessValueList(XElement xElement)
+        {
+            var temp = xElement; //VALUE
+            temp = temp.Element(ARRAY);
+            temp = temp.Element(DATA);
+
+            var values = temp.Elements(VALUE).ToList();
+            return values;
+        }
     }
 }

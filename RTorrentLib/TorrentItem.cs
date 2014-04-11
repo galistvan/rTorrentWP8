@@ -16,5 +16,29 @@ namespace RTorrentLib
         {
             return TorrentName;
         }
+
+        public bool Started { get; set; }
+
+        public long CompletedBytes { get; set; }
+
+        public long UpTotal { get; set; }
+
+        public long PeersComplete { get; set; }
+
+        public long PeersAccounted { get; set; }
+
+        public long DownRate { get; set; }
+
+        public long UpRate { get; set; }
+
+        public string Message { get; set; }
+
+        public long Priority { get; set; }
+
+        public long SizeBytes { get; set; }
+
+        public bool HashChecking { get; set; }
+
+        public string Label { get; set; }
     }
 }

@@ -8,19 +8,19 @@ using System.Xml.Linq;
 
 namespace RTorrentLib.RtorrentInterface
 {
-    public class TorrentsList
+    internal class TorrentsList
     {
         private string url;
-        public TorrentsList(string url)
+        internal TorrentsList(string url)
         {
             this.url = url;
         }
 
-        internal object[] GetParams()
+        private object[] GetParams()
         {
             List<object> pars = new List<object>();
-            pars.Add(String.Empty);
-            //pars.Add("incomplete");
+            //pars.Add(String.Empty);
+            pars.Add("incomplete");
             pars.Add("d.get_hash=");
             pars.Add("d.get_name=");
             pars.Add("d.get_state=");
@@ -43,20 +43,23 @@ namespace RTorrentLib.RtorrentInterface
             return "d.multicall";
         }
 
-        public List<TorrentItem> CallMethod()
+        internal List<TorrentItem> CallMethod()
         {
             XmlRpc xmlRpc = new XmlRpc(url);
 
-            var xElement = PostDataAndReadResponse(xmlRpc);
+            var response = PostDataAndReadResponse(xmlRpc);
 
-            return new XElementProcessor().Process(xElement);
+            return response.GetTorrents();
         }
 
-        internal XElement PostDataAndReadResponse(XmlRpc xmlRpc)
+        internal XmlRpcResponse PostDataAndReadResponse(XmlRpc xmlRpc)
         {
-            var task = xmlRpc.Call(GetMethodName(), GetParams());
-            task.Wait();
-            return XElement.Load(task.Result);
+            XmlRpcRequest request = new XmlRpcRequest(GetMethodName());
+            foreach (object param in GetParams())
+            {
+                request.AddParameter(param);
+            }
+            return xmlRpc.Call(request);
         }
     }
 }

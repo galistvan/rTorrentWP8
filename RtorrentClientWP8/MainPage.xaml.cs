@@ -9,6 +9,9 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using RtorrentClientWP8.Resources;
 using RTorrentLib.RtorrentInterface;
+using RTorrentLib;
+using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace RtorrentClientWP8
 {
@@ -21,24 +24,36 @@ namespace RtorrentClientWP8
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
-            load();
 
+            Update();
         }
 
-        private void load()
+        private async void Update()
         {
-            System.ComponentModel.BackgroundWorker bw = new System.ComponentModel.BackgroundWorker();
-            bw.DoWork += (s, ea) =>
+            while (true)
             {
-                TorrentsList torrents = new TorrentsList("http://raspberrypi.lan/rpc");
-                var ret = torrents.CallMethod();
-
+                await Task.Delay(1000);
+                Load();
+            }
+        }
+        private async void Load()
+        {
+            await Task.Run(() =>
+            {
+                RTorrent torrent = new RTorrent("http://raspberrypi.lan/rpc");
+                var ret = torrent.TorrentList();
                 Dispatcher.BeginInvoke(() =>
                 {
                     torrentList.ItemsSource = ret;
                 });
-            };
-            bw.RunWorkerAsync();
+            });
+        }
+
+        private void Start_Click(object sender, RoutedEventArgs e)
+        {
+            var item = torrentList.ItemContainerGenerator.ContainerFromItem(((MenuItem)sender).DataContext) as ListBoxItem;
+            TorrentItem torrent = (TorrentItem)item.Content;
+
         }
 
         // Sample code for building a localized ApplicationBar

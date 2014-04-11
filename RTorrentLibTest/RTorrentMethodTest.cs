@@ -41,7 +41,7 @@ namespace RTorrentLibTest
             sw.Write("</data></array></value>");
             sw.Write("<value><array><data>");
             sw.Write("<value><string>7BD6AB46D04766866A6A7FB1CD9E79BD887C33AF</string></value>");
-            sw.Write("<value><string>fdsa</string></value>");
+            sw.Write("<value><string>fdsaí</string></value>");
             sw.Write("<value><i8>0</i8></value>");
             sw.Write("<value><i8>0</i8></value>");
             sw.Write("<value><i8>0</i8></value>");
