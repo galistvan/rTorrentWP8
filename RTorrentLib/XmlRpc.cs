@@ -37,22 +37,8 @@ namespace RTorrentLib
 
         internal XmlRpcResponse Call(XmlRpcRequest xmlRpcRequest)
         {
-            try
-            {
-                HttpWebRequest hwr = SetupHttpRequest();
-
-                SendRequestTaskAsync(hwr, xmlRpcRequest).Wait();
-
-                Task<XmlRpcResponse> xmlRpcResponse = ReceiveRepsonseTaskAsync(hwr, xmlRpcRequest);
-                xmlRpcResponse.Wait();
-
-                return xmlRpcResponse.Result;
-            }
-            catch (Exception e )
-            {
-
-                throw;
-            }
+            HttpWebRequest hwr = SetupHttpRequest();
+            return SendAndReceive(hwr, xmlRpcRequest);
         }
 
         private HttpWebRequest SetupHttpRequest()
@@ -74,26 +60,35 @@ namespace RTorrentLib
             }
             return null;
         }
-
-        private async Task SendRequestTaskAsync(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
+        private XmlRpcResponse SendAndReceive(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
         {
-            using (var requestStream = await Task<Stream>.Factory.FromAsync(hwr.BeginGetRequestStream, hwr.EndGetRequestStream, hwr))
-            {
-                XmlRpcWriter xmlRpcWriter = new XmlRpcWriter(requestStream);
-                xmlRpcWriter.WriteRequest(xmlRpcRequest);
-                requestStream.Close();
-            }
+            SendRequest(hwr, xmlRpcRequest);
+            return ReceiveRepsonse(hwr, xmlRpcRequest);
         }
-        private async Task<XmlRpcResponse> ReceiveRepsonseTaskAsync(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
+        private void SendRequest(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
         {
-            using (WebResponse responseObject = await Task<WebResponse>.Factory.FromAsync(hwr.BeginGetResponse, hwr.EndGetResponse, hwr))
+            Task task = Task.Run(async () =>
             {
-                var responseStream = responseObject.GetResponseStream();
-
-                return new XmlRpcResponse(xmlRpcRequest, responseStream);
-
-            }
+                using (var requestStream = await Task<Stream>.Factory.FromAsync(hwr.BeginGetRequestStream, hwr.EndGetRequestStream, hwr))
+                {
+                    XmlRpcWriter xmlRpcWriter = new XmlRpcWriter(requestStream);
+                    xmlRpcWriter.WriteRequest(xmlRpcRequest);
+                    requestStream.Close();
+                }
+            });
+            task.Wait();
+        }
+        private XmlRpcResponse ReceiveRepsonse(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
+        {
+            Task<XmlRpcResponse> task = Task.Run<XmlRpcResponse>(async () =>
+            {
+                using (WebResponse responseObject = await Task<WebResponse>.Factory.FromAsync(hwr.BeginGetResponse, hwr.EndGetResponse, hwr))
+                {
+                    var responseStream = responseObject.GetResponseStream();
+                    return new XmlRpcResponse(xmlRpcRequest, responseStream);
+                }
+            });
+            return task.Result;
         }
     }
-
 }
