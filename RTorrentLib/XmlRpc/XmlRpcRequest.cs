@@ -8,29 +8,28 @@ namespace RTorrentLib
 {
     internal class XmlRpcRequest
     {
-        private string methodName;
-        private List<object> pars;
+        private readonly string _methodName;
+        private readonly List<object> _pars;
 
         internal string MethodName
         {
-            get { return methodName; }
+            get { return _methodName; }
         }
 
         internal object[] Parameters
         {
-            get { return pars.ToArray(); }
+            get { return _pars.ToArray(); }
         }
 
         internal XmlRpcRequest(string methodName)
         {
-            this.methodName = methodName;
-            this.pars = new List<object>();
+            this._methodName = methodName;
+            this._pars = new List<object>();
         }
 
         internal void AddParameter(object parameter)
         {
-            this.pars.Add(parameter);
+            this._pars.Add(parameter);
         }
-
     }
 }

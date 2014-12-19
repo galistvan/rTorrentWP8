@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,28 +9,26 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace RTorrentLib
+namespace RTorrentLib.XmlRpc
 {
-    internal class XmlRpc
+    internal class XmlRpcClient
     {
-        private string contentType;
-        private string httpMethod;
-        private string url;
+       
+        private readonly string contentType;
+        private readonly string httpMethod;
+        private readonly string url;
 
-        private string username;
-        private string password;
+        private readonly string username;
+        private readonly string password;
 
-        internal XmlRpc(string url)
+        internal XmlRpcClient(string url) : this(url, null, null)
         {
-            contentType = "text/xml";
-            httpMethod = "POST";
-            this.url = url;
         }
 
-        internal XmlRpc(string url, string username, string password)
+        internal XmlRpcClient(string url, string username, string password)
         {
-            contentType = "text/xml";
-            httpMethod = "POST";
+            this.contentType = "text/xml";
+            this.httpMethod = "POST";
             this.url = url;
             this.username = username;
             this.password = password;
@@ -43,7 +42,7 @@ namespace RTorrentLib
 
         private HttpWebRequest SetupHttpRequest()
         {
-            HttpWebRequest hwr = (HttpWebRequest)System.Net.WebRequest.CreateHttp(url);
+            var hwr = (HttpWebRequest)System.Net.WebRequest.CreateHttp(url);
             hwr.ContentType = contentType;
             hwr.Method = httpMethod;
             hwr.Credentials = GetCredentials();
@@ -53,10 +52,11 @@ namespace RTorrentLib
         {
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                NetworkCredential nc = new NetworkCredential();
-                nc.Password = password;
-                nc.UserName = username;
-                return nc;
+                return new NetworkCredential()
+                {
+                    Password = password,
+                    UserName = username
+                };
             }
             return null;
         }
@@ -71,21 +71,28 @@ namespace RTorrentLib
             {
                 using (var requestStream = await Task<Stream>.Factory.FromAsync(hwr.BeginGetRequestStream, hwr.EndGetRequestStream, hwr))
                 {
-                    XmlRpcWriter xmlRpcWriter = new XmlRpcWriter(requestStream);
+                    var xmlRpcWriter = new XmlRpcWriter(requestStream);
                     xmlRpcWriter.WriteRequest(xmlRpcRequest);
                     requestStream.Close();
                 }
             });
+            //TODO try-catch
             task.Wait();
         }
         private XmlRpcResponse ReceiveRepsonse(HttpWebRequest hwr, XmlRpcRequest xmlRpcRequest)
         {
+            Debug.WriteLine(xmlRpcRequest.ToString());
             Task<XmlRpcResponse> task = Task.Run<XmlRpcResponse>(async () =>
             {
                 using (WebResponse responseObject = await Task<WebResponse>.Factory.FromAsync(hwr.BeginGetResponse, hwr.EndGetResponse, hwr))
                 {
+                    Debug.WriteLine(responseObject.ToString());
                     var responseStream = responseObject.GetResponseStream();
+
+                    Debug.WriteLine(responseStream.ToString());
                     return new XmlRpcResponse(xmlRpcRequest, responseStream);
+
+
                 }
             });
             return task.Result;

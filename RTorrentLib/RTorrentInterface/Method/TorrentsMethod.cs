@@ -1,31 +1,45 @@
-﻿using RTorrentLib.RtorrentInterface;
+﻿using RTorrentLib.RTorrentInterface.Item;
+using RTorrentLib.RTorrentInterface.Method;
+using RTorrentLib.XmlRpc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace RTorrentLib
+namespace RTorrentLib.RTorrentInterface.Method
 {
-    internal class XmlRpcResponse
+    internal abstract class TorrentsMethod : MethodBase<List<TorrentItem>>
     {
-        private XElement xElement;
-        private XmlRpcRequest xmlRpcRequest;
+        internal TorrentsMethod(string url) : base(url) { }
 
-        internal XmlRpcResponse(XmlRpcRequest xmlRpcRequest, Stream responseStream)
+        protected static readonly object[] parameters = new object[]{
+                "d.get_hash=", "d.get_name=", "d.get_state=", "d.get_completed_bytes=",
+                "d.get_up_total=", "d.get_peers_complete=", "d.get_peers_accounted=", "d.get_down_rate=",
+                "d.get_up_rate=", "d.get_message=", "d.get_priority=", "d.get_size_bytes=", "d.is_hash_checking=",
+                "d.get_custom1=",
+            };
+
+        protected override object[] Parameters
         {
-            this.xmlRpcRequest = xmlRpcRequest;
-            xElement = XElement.Load(responseStream);
+            get { return parameters; }
         }
 
-        internal List<TorrentItem> GetTorrents()
+        protected override string MethodName
+        {
+            get
+            {
+                return "d.multicall";
+            }
+        }
+
+        protected override List<TorrentItem> ProcessResponse(XmlRpcResponse response)
         {
             List<TorrentItem> ret = new List<TorrentItem>();
-            XElementProcessor xElementProcessor = new XElementProcessor();
-            var values = xElementProcessor.GetValueList(xElement);
+            TorrentItemXElementProcessor xElementProcessor = new TorrentItemXElementProcessor();
+            var values = xElementProcessor.GetValueList(response.ResponseXElement);
             foreach (var value in values)
             {
                 var torrentItemValue = xElementProcessor.ProcessValueList(value);

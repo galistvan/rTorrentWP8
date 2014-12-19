@@ -45,7 +45,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;COMPACT_FRAMEWORK</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -83,15 +83,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\LoggerDecorator.cs" />
     <Compile Include="RTorrent.cs" />
-    <Compile Include="RtorrentInterface\TorrentsList.cs" />
-    <Compile Include="RtorrentInterface\XElementProcessor.cs" />
+    <Compile Include="RTorrentInterface\Method\MethodBase.cs" />
+    <Compile Include="RTorrentInterface\Method\StopTorrent.cs" />
+    <Compile Include="RTorrentInterface\Method\TorrentsMainMethod.cs" />
+    <Compile Include="RTorrentInterface\Method\TorrentsMethod.cs" />
+    <Compile Include="RTorrentInterface\TorrentItemXElementProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TorrentItem.cs" />
-    <Compile Include="XmlRpc.cs" />
-    <Compile Include="XmlRpcRequest.cs" />
-    <Compile Include="XmlRpcResponse.cs" />
-    <Compile Include="XmlRpcWriter.cs" />
+    <Compile Include="XmlRpc\XmlRpcTags.cs" />
+    <Compile Include="RTorrentInterface\Item\TorrentItemHashEqualityComparer.cs" />
+    <Compile Include="RTorrentInterface\Item\TorrentItem.cs" />
+    <Compile Include="XmlRpc\XmlRpcClient.cs" />
+    <Compile Include="XmlRpc\XmlRpcRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

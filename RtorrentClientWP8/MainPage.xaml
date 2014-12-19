@@ -42,7 +42,7 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <phone:Pivot>
-            <phone:PivotItem Header="download list" Margin="12,-7,12,0">
+            <phone:PivotItem Header="[main]" Margin="12,-7,12,0">
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <ListBox Height="442" HorizontalAlignment="Left" Name="torrentList" VerticalAlignment="Top" Width="468">
@@ -52,7 +52,7 @@
                             <toolkit:ContextMenuService.ContextMenu>
                                 <toolkit:ContextMenu IsZoomEnabled="True" x:Name="ContextMenu" >
                                     <toolkit:MenuItem x:Name="Start" Header="Start" Click="Start_Click"/>
-                                    <toolkit:MenuItem x:Name="Stop" Header="Stop" />
+                                    <toolkit:MenuItem x:Name="Stop" Header="Stop"  Click="Stop_Click"/>
                                     <toolkit:MenuItem x:Name="Remove" Header="Remove" />
                                 </toolkit:ContextMenu>
                             </toolkit:ContextMenuService.ContextMenu>
