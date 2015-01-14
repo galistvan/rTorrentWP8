@@ -22,7 +22,7 @@ namespace RtorrentClientWP8
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private readonly RTorrent _torrent;
+        private readonly IRTorrent _torrent;
 
         public MainPage()
         {
@@ -31,13 +31,13 @@ namespace RtorrentClientWP8
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
             MetroLogger logger = new Logger.MetroLogger();
-            _torrent = new RTorrent("http://raspberrypi.lan/rpc", logger);
+            _torrent = new RTorrentXmlRpc("http://raspberrypi.lan/scgi");
             Update();
         }
 
         private async void Update()
         {
-           // while (true)
+            while (true)
             {
                 await Task.Delay(1000);
                 Load();
@@ -49,8 +49,9 @@ namespace RtorrentClientWP8
         {
             await Task.Run(() =>
             {
-                var ret = _torrent.MainTorrents();
-                Dispatcher.BeginInvoke(() => RefreshTorrentList(ret));
+                var ret = _torrent.StartedTorrents();
+                ret.Wait();
+                Dispatcher.BeginInvoke(() => RefreshTorrentList(ret.Result));
             });
         }
 
@@ -84,14 +85,14 @@ namespace RtorrentClientWP8
         {
             var item = torrentList.ItemContainerGenerator.ContainerFromItem(((MenuItem)sender).DataContext) as ListBoxItem;
             TorrentItem torrent = (TorrentItem)item.Content;
-            _torrent.DownloadStart(torrent);
+            _torrent.StartTorrent(torrent);
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             var item = torrentList.ItemContainerGenerator.ContainerFromItem(((MenuItem)sender).DataContext) as ListBoxItem;
             TorrentItem torrent = (TorrentItem)item.Content;
-            _torrent.DownloadStop(torrent);
+            _torrent.StopTorrent(torrent);
         }
 
         // Sample code for building a localized ApplicationBar

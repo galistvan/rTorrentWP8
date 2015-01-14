@@ -83,15 +83,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IRTorrent.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Logger\LoggerDecorator.cs" />
-    <Compile Include="RTorrent.cs" />
+    <Compile Include="RTorrentHttpRequest.cs" />
+    <Compile Include="RTorrentXmlRpc.cs" />
     <Compile Include="RTorrentInterface\Method\MethodBase.cs" />
     <Compile Include="RTorrentInterface\Method\StopTorrent.cs" />
     <Compile Include="RTorrentInterface\Method\TorrentsMainMethod.cs" />
     <Compile Include="RTorrentInterface\Method\TorrentsMethod.cs" />
     <Compile Include="RTorrentInterface\TorrentItemXElementProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlRpcProxy\ClientVersion.cs" />
+    <Compile Include="XmlRpcProxy\StartTorrent.cs" />
+    <Compile Include="XmlRpcProxy\StopTorrent.cs" />
+    <Compile Include="XmlRpcProxy\TorrentList.cs" />
     <Compile Include="XmlRpc\XmlRpcTags.cs" />
     <Compile Include="RTorrentInterface\Item\TorrentItemHashEqualityComparer.cs" />
     <Compile Include="RTorrentInterface\Item\TorrentItem.cs" />
@@ -99,6 +105,12 @@
     <Compile Include="XmlRpc\XmlRpcRequest.cs" />
     <Compile Include="XmlRpc\XmlRpcResponse.cs" />
     <Compile Include="XmlRpc\XmlRpcWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xmlrpcwp\xmlrpcwp.csproj">
+      <Project>{7238d157-41bc-4f51-b3fa-ab250ca35bff}</Project>
+      <Name>xmlrpcwp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

@@ -17,12 +17,12 @@ namespace RTorrentLib.RTorrentInterface.Method
 
         protected override object[] Parameters
         {
-            get { return new object[] { "d.try_close=", torrentItem.Hash }; }
+            get { return new object[] { torrentItem.Hash }; }
         }
 
         protected override string MethodName
         {
-            get { return "d.multicall"; }
+            get { return "d.stop"; }
         }
 
         protected override bool ProcessResponse(XmlRpc.XmlRpcResponse response)
