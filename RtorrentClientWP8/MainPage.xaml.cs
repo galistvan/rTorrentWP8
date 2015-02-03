@@ -17,82 +17,27 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using RTorrentLib.RTorrentInterface.Item;
 using RTorrentLib.RTorrentInterface;
+using RtorrentClientWP8.ViewModel;
 
 namespace RtorrentClientWP8
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private readonly IRTorrent _torrent;
+        private StartedTorrents st;
 
         public MainPage()
         {
             InitializeComponent();
-
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
-            MetroLogger logger = new Logger.MetroLogger();
-            _torrent = new RTorrentXmlRpc("http://raspberrypi.lan/scgi");
-            Update();
+            this.st = new StartedTorrents();
         }
 
-        private async void Update()
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            while (true)
-            {
-                await Task.Delay(1000);
-                Load();
-            }
-        }
-        //TODO give back the list to the lib, and do that the refresh.
-        // The list should be binded to the xaml app
-        private async void Load()
-        {
-            await Task.Run(() =>
-            {
-                var ret = _torrent.StartedTorrents();
-                ret.Wait();
-                Dispatcher.BeginInvoke(() => RefreshTorrentList(ret.Result));
-            });
-        }
+            base.OnNavigatedTo(e);
 
-        private void RefreshTorrentList(IEnumerable<TorrentItem> torrentsList )
-        {
-            if (torrentList.ItemsSource == null)
-            {
-                torrentList.ItemsSource = new ObservableCollection<TorrentItem>(torrentsList);
-            }
-            else
-            {
-                var items = (ObservableCollection<TorrentItem>) torrentList.ItemsSource;
-                var comparer = new TorrentItemHashEqualityComparer();
-                foreach (var torrentItem in items)
-                {
+            st.RefreshList();
 
-                    if (items.Contains(torrentItem, comparer))
-                    {
-                        TorrentItem single = items.Single(item => comparer.Equals(item, torrentItem));
-                        single.Refresh(torrentItem);
-                    }
-                    else
-                    {
-                        items.Add(torrentItem);
-                    }
-                }
-            }
-        }
-
-        private void Start_Click(object sender, RoutedEventArgs e)
-        {
-            var item = torrentList.ItemContainerGenerator.ContainerFromItem(((MenuItem)sender).DataContext) as ListBoxItem;
-            TorrentItem torrent = (TorrentItem)item.Content;
-            _torrent.StartTorrent(torrent);
-        }
-
-        private void Stop_Click(object sender, RoutedEventArgs e)
-        {
-            var item = torrentList.ItemContainerGenerator.ContainerFromItem(((MenuItem)sender).DataContext) as ListBoxItem;
-            TorrentItem torrent = (TorrentItem)item.Content;
-            _torrent.StopTorrent(torrent);
+            startedTorrents.DataContext = st;
         }
 
         // Sample code for building a localized ApplicationBar

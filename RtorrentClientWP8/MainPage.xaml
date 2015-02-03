@@ -6,7 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:views="clr-namespace:RtorrentClientWP8.View"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -42,47 +42,9 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <phone:Pivot>
-            <phone:PivotItem Header="[main]" Margin="12,-7,12,0">
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Height="442" HorizontalAlignment="Left" Name="torrentList" VerticalAlignment="Top" Width="468">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Height="132">
-                            <toolkit:ContextMenuService.ContextMenu>
-                                <toolkit:ContextMenu IsZoomEnabled="True" x:Name="ContextMenu" >
-                                    <toolkit:MenuItem x:Name="Start" Header="Start" Click="Start_Click"/>
-                                    <toolkit:MenuItem x:Name="Stop" Header="Stop"  Click="Stop_Click"/>
-                                    <toolkit:MenuItem x:Name="Remove" Header="Remove" />
-                                </toolkit:ContextMenu>
-                            </toolkit:ContextMenuService.ContextMenu>
-                            <StackPanel Width="468">
-                                <!--<TextBlock Text="{Binding Hash}" Foreground="#FFC8AB14" FontSize="22" />-->
-                                <TextBlock Text="{Binding TorrentName}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding Started}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding CompletedBytes}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding DownRate}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding UpRate}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding SizeBytes}" TextWrapping="NoWrap" FontSize="24" />
-                                <TextBlock Text="{Binding Label}" TextWrapping="NoWrap" FontSize="24" />
-
-                            </StackPanel>
-                        </StackPanel>
-                        
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                
-            </ListBox>
-
-
-            <Image Visibility="Collapsed" Name="imgInProgress"  HorizontalAlignment="Left" Height="50" Margin="281,9,0,0" VerticalAlignment="Top" Width="50" Source="/Resources/InProgress.gif"/>
-        </Grid>
-            </phone:PivotItem >
-            <phone:PivotItem Header="started list">
-            </phone:PivotItem>
-            <phone:PivotItem  Header="stopped list">
-            </phone:PivotItem>
-            <phone:PivotItem  Header="incomplete list">
+            <phone:PivotItem Header="h" Margin="12,-7,12,0">
+                <!--ContentPanel - place additional content here-->
+                <views:StartedTorrents x:Name="startedTorrents" Height="600"/>
             </phone:PivotItem>
         </phone:Pivot>
 

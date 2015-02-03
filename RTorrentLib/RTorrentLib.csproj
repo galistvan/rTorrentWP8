@@ -99,7 +99,6 @@
     <Compile Include="XmlRpcProxy\StopTorrent.cs" />
     <Compile Include="XmlRpcProxy\TorrentList.cs" />
     <Compile Include="XmlRpc\XmlRpcTags.cs" />
-    <Compile Include="RTorrentInterface\Item\TorrentItemHashEqualityComparer.cs" />
     <Compile Include="RTorrentInterface\Item\TorrentItem.cs" />
     <Compile Include="XmlRpc\XmlRpcClient.cs" />
     <Compile Include="XmlRpc\XmlRpcRequest.cs" />

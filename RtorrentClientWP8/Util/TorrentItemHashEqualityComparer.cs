@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Devices;
-using RTorrentLib.RTorrentInterface.Item;
+using RtorrentClientWP8.Model;
 
-namespace RTorrentLib.RTorrentInterface
+namespace RtorrentClientWP8.Util
 {
     public class TorrentItemHashEqualityComparer : IEqualityComparer<TorrentItem>
     {

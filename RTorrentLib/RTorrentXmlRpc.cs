@@ -27,8 +27,15 @@ namespace RTorrentLib
 
         public async Task<List<TorrentItem>> StartedTorrents()
         {
-            var proxy = new TorrentList(this.serviceUrl, "started");
-            return await Task<List<TorrentItem>>.Factory.FromAsync(proxy.BeginInvoke, proxy.EndInvoke, this);
+            try
+            {
+                var proxy = new TorrentList(this.serviceUrl, "started");
+                return await Task<List<TorrentItem>>.Factory.FromAsync(proxy.BeginInvoke, proxy.EndInvoke, this);
+            }
+            catch (XmlRpcServerException ex)
+            {
+                return new List<TorrentItem>();
+            }
         }
 
         public async Task<List<TorrentItem>> StoppedTorrents()
